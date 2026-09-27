@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casa Condesa · Desayunos, Brunch & Café en Morelia</title>
     <meta name="description" content="Cocina sincera, panadería artesanal y café de especialidad en las terrazas más acogedoras de Morelia. Visítanos en nuestras 4 sucursales.">
+    <meta name="theme-color" content="#C8623E">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+
+    <!-- Open Graph / Twitter Card (para previsualización al compartir por WhatsApp y redes sociales) -->
+    <!-- IMPORTANTE: al publicar, reemplaza "images/terraza_leones.jpg" por la URL absoluta real (https://tudominio.com/images/...) -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:title" content="Casa Condesa · Desayunos, Brunch & Café en Morelia">
+    <meta property="og:description" content="Cocina sincera, panadería artesanal y café de especialidad en las terrazas más acogedoras de Morelia. Visítanos en nuestras 4 sucursales.">
+    <meta property="og:image" content="images/terraza_leones.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Casa Condesa · Desayunos, Brunch & Café en Morelia">
+    <meta name="twitter:description" content="Cocina sincera, panadería artesanal y café de especialidad en las terrazas más acogedoras de Morelia.">
+    <meta name="twitter:image" content="images/terraza_leones.jpg">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -211,6 +225,70 @@
             display: flex;
             align-items: center;
             gap: 14px;
+        }
+
+        /* ---------- Mobile Menu Toggle (Hamburger) ---------- */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--cream-border);
+            background: var(--cream-subtle);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0;
+        }
+
+        .menu-toggle:hover {
+            border-color: var(--terracotta);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            margin: 0 auto;
+            background: var(--charcoal);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            padding: 4px 28px 18px;
+            border-top: 1px solid var(--cream-border);
+            background: var(--cream-bg);
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu .nav-link {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--cream-border);
+            font-size: 15px;
+        }
+
+        .mobile-menu .nav-link:last-child {
+            border-bottom: none;
         }
 
         /* ---------- Buttons ---------- */
@@ -1217,8 +1295,12 @@
         }
 
         @media (max-width: 768px) {
-            .nav-menu, .nav-actions .btn-sm {
+            .nav-menu {
                 display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
             }
 
             .hero-title {
@@ -1280,8 +1362,18 @@
 
             <div class="nav-actions">
                 <a href="#ubicaciones" class="btn btn-primary btn-sm">Cómo llegar</a>
+                <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú de navegación">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
         </div>
+
+        <nav class="mobile-menu" id="mobile-menu" aria-label="Navegación móvil">
+            <a href="#menu" class="nav-link">Menú</a>
+            <a href="#historia" class="nav-link">Nuestra Esencia</a>
+            <a href="#galeria" class="nav-link">Galería</a>
+            <a href="#ubicaciones" class="nav-link">Sucursales (4)</a>
+        </nav>
     </header>
 
     <main>
@@ -1363,11 +1455,11 @@
                 </div>
 
                 <!-- Menu Categories Filter -->
-                <div class="menu-filters" role="tablist">
-                    <button class="filter-btn active" data-filter="all">Todos los favoritos</button>
-                    <button class="filter-btn" data-filter="desayunos">Desayunos & Brunch</button>
-                    <button class="filter-btn" data-filter="dulce">Panadería & Dulce</button>
-                    <button class="filter-btn" data-filter="cafe">Café & Bebidas</button>
+                <div class="menu-filters" role="tablist" aria-label="Filtrar menú por categoría">
+                    <button class="filter-btn active" role="tab" aria-selected="true" data-filter="all">Todos los favoritos</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="desayunos">Desayunos & Brunch</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="dulce">Panadería & Dulce</button>
+                    <button class="filter-btn" role="tab" aria-selected="false" data-filter="cafe">Café & Bebidas</button>
                 </div>
 
                 <!-- Menu Grid -->
@@ -1469,10 +1561,12 @@
                     </div>
 
                     <!-- Item 6: Panadería & Repostería -->
+                    <!-- TODO: reemplazar por una foto real de la canasta de pan cuando esté disponible; -->
+                    <!-- se usa salon_vintage.jpg de forma temporal para no repetir la imagen de waffles del Item 1 -->
                     <div class="menu-card" data-category="dulce">
                         <div class="menu-card-image">
                             <span class="menu-card-tag">De la Casa</span>
-                            <img src="images/waffles_condesa.jpg" alt="Panadería y postres de la casa">
+                            <img src="images/salon_vintage.jpg" alt="Rincón acogedor de Casa Condesa para disfrutar la canasta de pan y postres de temporada">
                         </div>
                         <div class="menu-card-body">
                             <div class="menu-card-header">
@@ -1913,14 +2007,37 @@
             });
         });
 
-        // 2. Interactive Menu Category Filtering
+        // 2. Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                const isOpen = mobileMenu.classList.toggle('open');
+                menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+
+            // Cerrar el menú móvil al elegir un enlace
+            mobileMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        // 3. Interactive Menu Category Filtering
         const filterBtns = document.querySelectorAll('.filter-btn');
         const menuCards = document.querySelectorAll('.menu-card');
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
+                filterBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
 
                 const filter = btn.dataset.filter;
 
